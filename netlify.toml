@@ -1,7 +1,10 @@
 [build]
-  command = "npm install --legacy-peer-deps && ng build --configuration=production"
+  command = "npm install --legacy-peer-deps && npm run build"
+  publish = "build"
 
-  publish = "dist/web-analytics"
+[build.environment]
+  NPM_FLAGS = "--legacy-peer-deps"
+
  
  
 [[redirects]]
