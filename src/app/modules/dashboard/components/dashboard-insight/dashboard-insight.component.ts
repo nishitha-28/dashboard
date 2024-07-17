@@ -42,8 +42,11 @@ export class InsightComponent {
   userEventDates: UserSelectItem[] = [];
   userDropdownData: UserSelectItem[] = [];
 
+  userIdToNameMap: Map<string, string> = new Map();
+
   selectedUsername: string = '';
   selectedClient: string = '';
+  selectedUserId: string = '';
   selectedDateForId: string = '';
   defaultSelectedClient: string = '';
   selectedInterval: string = WEEKLY_INTERVAL;
@@ -121,11 +124,15 @@ export class InsightComponent {
     const userSubscription = this.dataService
       .getUsersByClientName(defaultSelectedClient)
       .subscribe((users) => {
-        this.userDropdownData = users.map((user, index) => ({
-          id: user._id,
-          value: `User ${index + 1}`,
-        }));
-        this.selectedUsername = '';
+        this.userDropdownData = users.map((user, index) => {
+          const displayName = `User ${index + 1}`;
+          this.userIdToNameMap.set(user._id, displayName);
+          return {
+            id: user._id,
+            value: displayName,
+          };
+        });
+        this.selectedUserId = '';
         this.insightRenderChart(defaultSelectedClient);
 
         const isDailyInterval = this.selectedInterval === DAILY_INTERVAL;
@@ -144,11 +151,7 @@ export class InsightComponent {
           this.isScreenOverview = true;
         }
 
-        if (
-          this.selectedClient &&
-          this.selectedUsername &&
-          !this.selectedDate
-        ) {
+        if (this.selectedClient && this.selectedUserId && !this.selectedDate) {
           this.getWeeklyData();
         }
       });
@@ -268,11 +271,13 @@ export class InsightComponent {
                   ),
                 );
 
-                console.log(this.selectedUsername);
+                const displayName =
+                  this.userIdToNameMap.get(this.selectedUsername) ||
+                  this.selectedUsername;
 
                 const seriesData = [
                   {
-                    name: this.selectedUsername,
+                    name: displayName,
                     type: 'line',
                     data: currentWeekData.map((entry) => entry.totalCount),
                   },
@@ -337,9 +342,13 @@ export class InsightComponent {
             return matchingEntry ? matchingEntry.totalCount : 0;
           });
 
+          const displayName =
+            this.userIdToNameMap.get(this.selectedUsername) ||
+            this.selectedUsername;
+
           const seriesData = [
             {
-              name: this.selectedUsername,
+              name: displayName,
               type: 'line',
               data: totalCounts,
             },
