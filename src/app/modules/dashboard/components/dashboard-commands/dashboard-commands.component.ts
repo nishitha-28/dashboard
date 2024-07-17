@@ -94,11 +94,7 @@ export class DashboardCommandsComponent {
     this.dashboardCommandService
       .getQuestionForClient(clientName)
       .subscribe((questions: Question[]) => {
-        console.log(this.questions);
-        // this.questions = questions.map(q => ({ question: q.question }));
         this.questions = questions;
-
-        console.log(this.questions);
       });
 
     this.dashboardCommandService
@@ -106,11 +102,6 @@ export class DashboardCommandsComponent {
       .subscribe((animations: Animation[]) => {
         this.animations = animations;
       });
-
-    // this.dashboardCommandService.getAnimationForClient(clientName)
-    // .subscribe((questions: Question[]) => {
-    //   this.questions = questions;
-    // });
   }
 
   closeTextarea(index: number) {
@@ -163,21 +154,15 @@ export class DashboardCommandsComponent {
 
     this.dashboardCommandService
       .postOfferData(this.defaultSelectedClient, newOffers)
-      .subscribe(
-        (response) => {
-          console.log('Offer data sent successfully:', response);
-          const updatedOffers = [...this.offers, ...newOffers];
-          this.offers = updatedOffers;
+      .subscribe(() => {
+        const updatedOffers = [...this.offers, ...newOffers];
+        this.offers = updatedOffers;
 
-          this.offerTextInputs.forEach((input) => (input.value = ''));
-          this.linkTextInputs.forEach((input) => (input.value = ''));
+        this.offerTextInputs.forEach((input) => (input.value = ''));
+        this.linkTextInputs.forEach((input) => (input.value = ''));
 
-          this.offerDialogVisible = false;
-        },
-        (error) => {
-          console.error('Error occurred while sending offer data:', error);
-        },
-      );
+        this.offerDialogVisible = false;
+      });
   }
 
   toggleDialog(dialog: string): void {
@@ -218,8 +203,6 @@ export class DashboardCommandsComponent {
   }
 
   submitData() {
-    console.log(this.selectedAnimation);
-    console.log(this.selectedQuestion);
     const data = {
       questions: this.selectedQuestion
         ? [{ question: this.selectedQuestion.question }]
@@ -233,33 +216,25 @@ export class DashboardCommandsComponent {
       animations: [this.selectedAnimation],
     };
 
-    console.log(data);
-
     this.http
       .post(
         `https://webanalyticals.onrender.com/chatBot/submitData/${this.defaultSelectedClient}`,
         data,
       )
-      .subscribe(
-        (response) => {
-          const message =
-            (response as { message: string }).message || 'Success';
-          Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: message,
-            width: '15rem',
-            showConfirmButton: false,
-            timer: 1500,
-            customClass: {
-              popup: 'my-swal',
-            },
-          });
-        },
-        (error) => {
-          console.error('Error occurred while submitting data:', error);
-        },
-      );
+      .subscribe((response) => {
+        const message = (response as { message: string }).message || 'Success';
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: message,
+          width: '15rem',
+          showConfirmButton: false,
+          timer: 1500,
+          customClass: {
+            popup: 'my-swal',
+          },
+        });
+      });
   }
 
   resetInputs() {
@@ -297,48 +272,31 @@ export class DashboardCommandsComponent {
     this.dashboardCommandService[postMethod](
       this.defaultSelectedClient,
       postData,
-    ).subscribe(
-      (response: any) => {
-        console.log('API Response:', response);
-        if (
-          type === 'question' &&
-          response.message === 'Questions Added Successfully'
-        ) {
-          this.fetchUpdatedQuestions();
-        } else if (type === 'animation') {
-          console.error('response success:', response);
-          this.animations = [...this.animations, ...postData];
-          this.animationTextInputs.forEach((input) => (input.value = ''));
-          this.animationDialogVisible = false;
-        } else {
-          console.error('Unexpected response:', response);
-        }
+    ).subscribe((response: any) => {
+      if (
+        type === 'question' &&
+        response.message === 'Questions Added Successfully'
+      ) {
+        this.fetchUpdatedQuestions();
+      } else if (type === 'animation') {
+        this.animations = [...this.animations, ...postData];
+        this.animationTextInputs.forEach((input) => (input.value = ''));
+        this.animationDialogVisible = false;
+      }
 
-        if (type === 'question') {
-          this.questionTextInputs.forEach((input) => (input.value = ''));
-          this.questionDialogVisible = false;
-        }
-      },
-      (error) => {
-        console.error(`Error occurred while sending ${type} data:`, error);
-      },
-    );
+      if (type === 'question') {
+        this.questionTextInputs.forEach((input) => (input.value = ''));
+        this.questionDialogVisible = false;
+      }
+    });
   }
 
   fetchUpdatedQuestions() {
     this.dashboardCommandService
       .getQuestionForClient(this.defaultSelectedClient)
-      .subscribe(
-        (updatedQuestions: Question[]) => {
-          this.questions = updatedQuestions;
-        },
-        (error) => {
-          console.error(
-            'Error occurred while fetching updated questions:',
-            error,
-          );
-        },
-      );
+      .subscribe((updatedQuestions: Question[]) => {
+        this.questions = updatedQuestions;
+      });
   }
 
   clearInput(index: number, type: string): void {

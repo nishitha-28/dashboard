@@ -8,13 +8,14 @@
       font-size: 1.125rem;
       font-weight: 500;
       padding: 0.938rem 3.125rem;
-      transition: background-color 0.3s ease-in-out, border 0.3s ease-in-out;
+      transition:
+        background-color 0.3s ease-in-out,
+        border 0.3s ease-in-out;
     }
 
     > *:first-child {
       border-radius: 1rem 0 0;
     }
-
 
     .inactive {
       border: 1px solid transparent;
@@ -42,7 +43,7 @@ h3 {
 
 .card-widget {
   @include widgetCardBaseStyle;
-  
+
   .browser-view {
     height: 400px;
     margin: 0 auto;
@@ -78,7 +79,7 @@ h3 {
   display: flex;
   gap: 29px;
 
-  .card-body select { 
+  .card-body select {
     width: 100%;
     padding: 8px;
     font-size: 16px;
@@ -112,7 +113,7 @@ p-card-header {
     justify-content: center;
     border-radius: 8px;
     opacity: 1;
-    background: var(--background-color);
+    background: #091932;
     margin-right: 15px;
     .icons {
       margin-right: 7px;
@@ -161,20 +162,22 @@ p-card-header {
   padding: 5px;
   margin-right: 5px;
 }
-.clicked-actions{
-  svg{
-    width:24px;
+.clicked-actions {
+  svg {
+    width: 24px;
   }
 }
-.active-user-by-device{
-  svg{
+.active-user-by-device {
+  svg {
     width: 60px;
   }
 }
 
 .high-chart {
   background: var(--primary-color) 0% 0% no-repeat padding-box;
-  box-shadow: inset 0px 0px 3px #00000029, 9px 7px 9px #ccc1c11f;
+  box-shadow:
+    inset 0px 0px 3px #00000029,
+    9px 7px 9px #ccc1c11f;
   border-radius: 10px;
   opacity: 1;
 }
@@ -222,10 +225,10 @@ progress {
   width: 100%;
 }
 
-.visibility-hidden{
+.visibility-hidden {
   visibility: hidden;
 }
-.hide{
+.hide {
   display: none;
 }
 
@@ -241,13 +244,13 @@ progress {
 }
 
 .no-data-content {
-  span{
+  span {
     font-size: 4rem;
   }
   img {
-  width: 6rem;
-  height: 20px; /* Adjust size as needed */
-  margin-top: 10rem;
+    width: 6rem;
+    height: 20px; /* Adjust size as needed */
+    margin-top: 10rem;
   }
 }
 
@@ -285,8 +288,6 @@ progress {
   display: flex;
 }
 
-
-
-.disable-class-screen{
+.disable-class-screen {
   display: none;
 }
