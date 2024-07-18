@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../../../shared/services/dashboard.service';
 import { Table } from 'primeng/table';
+import { Router } from '@angular/router';
 import { SelectedClientService } from '../../../shared/shared.service';
 import {
   ACTIVE_USER_BY_DEVICE,
@@ -71,6 +72,7 @@ export class TableComponent implements OnInit {
   constructor(
     public dataService: DataService,
     private selectedClientService: SelectedClientService,
+    private router: Router,
   ) {
     if (this.dataService.widgetLink === MOST_VIEWED_PAGES_LINK) {
       this.widgetHeading = MOST_VIEWED_PAGES_HEADING;
@@ -115,6 +117,10 @@ export class TableComponent implements OnInit {
         this.fetchTableData();
       }
     });
+  }
+
+  navigateToDashboard() {
+    this.router.navigate(['/dashboard']);
   }
 
   fetchTableData() {
