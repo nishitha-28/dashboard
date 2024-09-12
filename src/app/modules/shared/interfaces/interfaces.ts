@@ -63,3 +63,9 @@ export interface DeviceCount {
     animation: string;
     _id?: string;
   }
+  export interface userResponse {
+    _id: string;
+    date: string;
+    screens: { [key: string]: { [key: string]: number } };
+    totalCount: number;
+  }

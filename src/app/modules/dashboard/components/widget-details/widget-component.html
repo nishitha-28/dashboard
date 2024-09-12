@@ -1,12 +1,11 @@
-<h3>
-  <span><i class="pi pi-angle-left" (click)="navigateToDashboard()"></i></span>
-  {{ widgetHeading }}
-</h3>
+<h3>{{ widgetHeading }}</h3>
 <div class="dashboard-container">
-  <div class="p-5" *ngIf="tableData !== null">
+  
+  <div class="p-5" *ngIf="tableData != null">
+
     <p-table
       class="primary-table"
-      #dt1
+      #widgetTable
       dataKey="id"
       styleClass="p-datatable-striped"
       [value]="tableData"
@@ -31,16 +30,13 @@
             />
           </span>
           <span>
-            <button (click)="dt1.exportCSV()">Export</button>
+            <button (click)="widgetTable.exportCSV()">Export</button>
           </span>
         </div>
       </ng-template>
       <ng-template pTemplate="header">
         <tr>
-          <th
-            *ngFor="let col of cols"
-            style="min-width: 15rem; padding: 1.5rem"
-          >
+          <th *ngFor="let col of cols" style="min-width: 15rem ; padding: 1.5rem;">
             {{ col.header }}
           </th>
         </tr>
@@ -49,14 +45,14 @@
         <tr>
           <td>{{ rowIndex + 1 }}</td>
           <td>
-            <span class="ml-1 vertical-align-middle"
-              >{{ data[this.primaryField] }}</span
-            >
+            <span class="ml-1 vertical-align-middle">{{
+              data[this.primaryField]
+            }}</span>
           </td>
           <td>
-            <span class="ml-1 vertical-align-middle"
-              >{{ data[this.secondaryField] }}</span
-            >
+            <span class="ml-1 vertical-align-middle">{{
+              data[this.secondaryField]
+            }}</span>
           </td>
         </tr>
       </ng-template>
@@ -68,7 +64,7 @@
     </p-table>
 
     <p-table
-      #dt1
+      #widgetTable
       dataKey="id"
       class="primary-table"
       [value]="tableData"
@@ -102,7 +98,9 @@
       </ng-template>
       <ng-template pTemplate="header">
         <tr>
-          <th *ngFor="let col of cols">{{ col.header }}</th>
+          <th *ngFor="let col of cols">
+            {{ col.header }}
+          </th>
         </tr>
       </ng-template>
       <ng-template
@@ -113,12 +111,16 @@
         let-rowspan="rowspan"
       >
         <tr>
-          <td>{{ rowIndex }}</td>
+          <td>{{ rowIndex+1 }}</td>
           <td *ngIf="rowgroup" [attr.rowspan]="rowspan">
             <span class="font-bold ml-2">{{ data[this.primaryField] }}</span>
           </td>
-          <td>{{ data.cityName }}</td>
-          <td>{{ data.users }}</td>
+          <td>
+            {{ data.cityName }}
+          </td>
+          <td>
+            {{ data.users }}
+          </td>
         </tr>
       </ng-template>
     </p-table>
