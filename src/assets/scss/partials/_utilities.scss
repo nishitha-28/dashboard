@@ -6,6 +6,7 @@ $icon-svg: "maplandmark", "cursor-finger", "eye", "cross", "burger", "check",
   .icon-#{$icon} {
     height: 1.5rem;
     width: 1.5rem;
+    cursor: pointer;
     background-size: contain;
     background-image: url("./../../img/#{$icon}.svg");
     background-repeat: no-repeat;
@@ -18,11 +19,4 @@ $icon-svg: "maplandmark", "cursor-finger", "eye", "cross", "burger", "check",
 .icon-cross,
 .icon-check {
   height: 0.7rem;
-}
-
-.pi-angle-left {
-  cursor: pointer;
-  margin-left: 10px;
-  margin-right: 10px;
-  color: #8b939f;
 }

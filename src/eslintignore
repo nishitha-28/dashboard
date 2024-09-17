@@ -1,7 +1,0 @@
-
-*.spec.ts
-*.reducers.ts
-*.effect.ts
-*.actions.ts
-*.selectors.ts
-

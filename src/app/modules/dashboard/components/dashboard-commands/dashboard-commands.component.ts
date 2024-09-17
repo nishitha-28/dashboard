@@ -14,7 +14,6 @@ import {
 @Component({
   selector: 'app-dashboard-commands',
   templateUrl: './dashboard-commands.component.html',
-  styleUrl: './dashboard-commands.component.css',
 })
 export class DashboardCommandsComponent {
   countries!: Country[];
@@ -154,15 +153,20 @@ export class DashboardCommandsComponent {
 
     this.dashboardCommandService
       .postOfferData(this.defaultSelectedClient, newOffers)
-      .subscribe(() => {
-        const updatedOffers = [...this.offers, ...newOffers];
-        this.offers = updatedOffers;
+      .subscribe(
+        (response) => {
+          const updatedOffers = [...this.offers, ...newOffers];
+          this.offers = updatedOffers;
 
-        this.offerTextInputs.forEach((input) => (input.value = ''));
-        this.linkTextInputs.forEach((input) => (input.value = ''));
+          this.offerTextInputs.forEach((input) => (input.value = ''));
+          this.linkTextInputs.forEach((input) => (input.value = ''));
 
-        this.offerDialogVisible = false;
-      });
+          this.offerDialogVisible = false;
+        },
+        (error) => {
+          console.error('Error occurred while sending offer data:', error);
+        },
+      );
   }
 
   toggleDialog(dialog: string): void {
@@ -221,20 +225,26 @@ export class DashboardCommandsComponent {
         `https://webanalyticals.onrender.com/chatBot/submitData/${this.defaultSelectedClient}`,
         data,
       )
-      .subscribe((response) => {
-        const message = (response as { message: string }).message || 'Success';
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: message,
-          width: '15rem',
-          showConfirmButton: false,
-          timer: 1500,
-          customClass: {
-            popup: 'my-swal',
-          },
-        });
-      });
+      .subscribe(
+        (response) => {
+          const message =
+            (response as { message: string }).message || 'Success';
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: message,
+            width: '15rem',
+            showConfirmButton: false,
+            timer: 1500,
+            customClass: {
+              popup: 'my-swal',
+            },
+          });
+        },
+        (error) => {
+          console.error('Error occurred while submitting data:', error);
+        },
+      );
   }
 
   resetInputs() {
@@ -272,31 +282,47 @@ export class DashboardCommandsComponent {
     this.dashboardCommandService[postMethod](
       this.defaultSelectedClient,
       postData,
-    ).subscribe((response: any) => {
-      if (
-        type === 'question' &&
-        response.message === 'Questions Added Successfully'
-      ) {
-        this.fetchUpdatedQuestions();
-      } else if (type === 'animation') {
-        this.animations = [...this.animations, ...postData];
-        this.animationTextInputs.forEach((input) => (input.value = ''));
-        this.animationDialogVisible = false;
-      }
+    ).subscribe(
+      (response: any) => {
+        if (
+          type === 'question' &&
+          response.message === 'Questions Added Successfully'
+        ) {
+          this.fetchUpdatedQuestions();
+        } else if (type === 'animation') {
+          console.error('response success:', response);
+          this.animations = [...this.animations, ...postData];
+          this.animationTextInputs.forEach((input) => (input.value = ''));
+          this.animationDialogVisible = false;
+        } else {
+          console.error('Unexpected response:', response);
+        }
 
-      if (type === 'question') {
-        this.questionTextInputs.forEach((input) => (input.value = ''));
-        this.questionDialogVisible = false;
-      }
-    });
+        if (type === 'question') {
+          this.questionTextInputs.forEach((input) => (input.value = ''));
+          this.questionDialogVisible = false;
+        }
+      },
+      (error) => {
+        console.error(`Error occurred while sending ${type} data:`, error);
+      },
+    );
   }
 
   fetchUpdatedQuestions() {
     this.dashboardCommandService
       .getQuestionForClient(this.defaultSelectedClient)
-      .subscribe((updatedQuestions: Question[]) => {
-        this.questions = updatedQuestions;
-      });
+      .subscribe(
+        (updatedQuestions: Question[]) => {
+          this.questions = updatedQuestions;
+        },
+        (error) => {
+          console.error(
+            'Error occurred while fetching updated questions:',
+            error,
+          );
+        },
+      );
   }
 
   clearInput(index: number, type: string): void {
